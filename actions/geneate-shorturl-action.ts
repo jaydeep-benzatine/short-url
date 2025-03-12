@@ -17,7 +17,8 @@ export const genrateShortUrlAction = async (prevState: any, fd: FormData) => {
 
     // TODO: generate short url here
     const shortId = nanoid(6);
-    await client.set(shortId, longURL);
+    const key = `short-url:${shortId}`;
+    await client.set(key, longURL);
 
     return { success: true, data: shortId };
   } catch (error) {

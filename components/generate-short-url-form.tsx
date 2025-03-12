@@ -25,10 +25,11 @@ export default function GenerateShortURLForm() {
           name="url"
           id="url"
           placeholder="Enter your long URL here..."
-          className="w-full rounded-md border border-slate-400 px-2 py-1 focus:ring-1 focus:ring-slate-500 focus:outline-none"
+          className="w-full rounded-full border border-slate-400 px-4 py-2 focus:ring-1 focus:ring-slate-500 focus:outline-none"
           required
           autoComplete="off"
           title="Please enter a valid URL"
+          autoFocus
         />
 
         {!state.success && <p className="mx-2 text-red-500">{state?.error}</p>}
@@ -54,7 +55,7 @@ function SubmitButton() {
   return (
     <button
       type="submit"
-      className={`${pending ? "bg-slate-300" : "bg-slate-900"} mr-1 self-end rounded-md px-3 py-1.5 text-white hover:cursor-pointer`}
+      className={`${pending ? "bg-slate-300" : "bg-slate-900"} mr-1 self-end rounded-full px-4 py-2 text-white hover:cursor-pointer`}
       disabled={pending}
     >
       {pending ? "Generating..." : "Generate"}

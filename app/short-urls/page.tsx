@@ -1,18 +1,19 @@
-import GenerateShortURLForm from "@/components/generate-short-url-form";
+import getAllShortUrls from "@/backend/data-access/get-all-short-urls";
 
-export default async function Home() {
+export default async function Page() {
+  const shortUrls = await getAllShortUrls();
+
   return (
-    <div className="flex flex-col items-center justify-center gap-2">
-      <section
-        id="header"
-        className="mt-5 flex h-56 items-center justify-center"
-      >
-        <h1 className="text-center text-4xl font-semibold">URL Shortner</h1>
-      </section>
+    <>
+      <div className="mt-5 flex min-h-screen flex-col items-center gap-3">
+        <p className="text-4xl font-semibold">Short URLs List</p>
 
-      <main className="w-96">
-        <GenerateShortURLForm />
-      </main>
-    </div>
+        <ul>
+          {shortUrls.map((it) => (
+            <li key={`short-url-${it}`}>{it}</li>
+          ))}
+        </ul>
+      </div>
+    </>
   );
 }
