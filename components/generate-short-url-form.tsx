@@ -1,13 +1,21 @@
 "use client";
 
-import { genrateShortUrlAction } from "@/actions/geneate-shorturl-action";
+import {
+  genrateShortUrlAction,
+  IShortURLResponseType,
+} from "@/actions/geneate-shorturl-action";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 
+const initialState: IShortURLResponseType = {
+  success: false,
+};
+
 export default function GenerateShortURLForm() {
-  const [state, formAction] = useActionState(genrateShortUrlAction, {
-    message: "",
-  });
+  const [state, formAction] = useActionState(
+    genrateShortUrlAction,
+    initialState,
+  );
 
   return (
     <>
@@ -20,25 +28,33 @@ export default function GenerateShortURLForm() {
           className="w-full rounded-md border border-slate-400 px-2 py-1 focus:ring-1 focus:ring-slate-500 focus:outline-none"
           required
           autoComplete="off"
+          title="Please enter a valid URL"
         />
 
-        <SubmitButton />
+        {!state.success && <p className="mx-2 text-red-500">{state?.error}</p>}
 
-        {state.message && <p style={{ color: "green" }}>{state.message}</p>}
+        {state.success && (
+          <p className="mx-2">
+            Your short url is{" "}
+            <span className="text-green-500 underline">
+              {`${window.location.origin}/${state?.data}`}
+            </span>
+          </p>
+        )}
+
+        <SubmitButton />
       </form>
     </>
   );
 }
 
 function SubmitButton() {
-  const { pending, action, data, method } = useFormStatus();
-
-  console.log({ pending, action, data, method });
+  const { pending } = useFormStatus();
 
   return (
     <button
       type="submit"
-      className={`${pending ? "bg-slate-300" : "bg-slate-900"} mr-1 self-end rounded-md px-4 py-2 text-white hover:cursor-pointer`}
+      className={`${pending ? "bg-slate-300" : "bg-slate-900"} mr-1 self-end rounded-md px-3 py-1.5 text-white hover:cursor-pointer`}
       disabled={pending}
     >
       {pending ? "Generating..." : "Generate"}

@@ -1,22 +1,39 @@
 "use server";
 
-export const genrateShortUrlAction = async (prevState: any, fd: FormData) => {
-  console.log("I am inside genrateShortUrlAction action");
+import client from "@/lib/redis/client";
+import { nanoid } from "nanoid";
 
+export type IShortURLResponseType = {
+  success: boolean;
+  data?: string;
+  error?: string;
+};
+
+export const genrateShortUrlAction = async (prevState: any, fd: FormData) => {
   try {
-    const longURL = fd.get("url");
+    const longURL = fd.get("url") as string;
 
     if (!longURL) throw new Error("Please enter URL to shorten It.");
 
     // TODO: generate short url here
-    const shortURL = longURL;
+    const shortId = nanoid(6);
+    await client.set(shortId, longURL);
 
-    // await new Promise((resolve) => setTimeout(resolve, 4000));
-
-    return { message: `New Short URL is created: ${shortURL}` };
+    return { success: true, data: shortId };
   } catch (error) {
+    console.log("Error generating short url");
+    console.log(error);
+
+    if (error instanceof Error) {
+      return {
+        success: false,
+        error: (error as Error).message,
+      };
+    }
+
     return {
-      message: `Unable to generate short url, Error: ${(error as Error).message}`,
+      success: false,
+      error: "Unable to geneate short URL",
     };
   }
 };

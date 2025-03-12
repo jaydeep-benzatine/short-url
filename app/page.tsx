@@ -1,6 +1,6 @@
 import GenerateShortURLForm from "@/components/generate-short-url-form";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="flex flex-col items-center justify-center gap-2">
       <section
