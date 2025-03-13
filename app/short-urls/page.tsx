@@ -1,7 +1,7 @@
 import getAllShortUrls from "@/backend/data-access/get-all-short-urls";
 
 export default async function Page() {
-  const shortUrls = await getAllShortUrls();
+  const result = await getAllShortUrls();
 
   return (
     <>
@@ -9,8 +9,10 @@ export default async function Page() {
         <p className="text-4xl font-semibold">Short URLs List</p>
 
         <ul>
-          {shortUrls.map((it) => (
-            <li key={`short-url-${it}`}>{it}</li>
+          {result.map((it) => (
+            <li key={`short-url-${it.shortId}`}>
+              {it.shortId} - {it.value} - {it.counter}
+            </li>
           ))}
         </ul>
       </div>
